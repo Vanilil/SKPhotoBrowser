@@ -18,6 +18,9 @@ import SKPhotoBrowserObjC
     var contentMode: UIView.ContentMode { get set }
     func loadUnderlyingImageAndNotify()
     func checkCache()
+    func isVideo()->Bool
+    func getVideoUrl()->String?
+
 }
 
 // MARK: - SKPhoto
@@ -28,6 +31,8 @@ open class SKPhoto: NSObject, SKPhotoProtocol {
     open var contentMode: UIView.ContentMode = .scaleAspectFill
     open var shouldCachePhotoURLImage: Bool = false
     open var photoURL: String!
+    open var videoURL: String!
+    open var hasVideo: Bool = false
 
     override init() {
         super.init()
@@ -128,7 +133,13 @@ open class SKPhoto: NSObject, SKPhotoProtocol {
     open func loadUnderlyingImageComplete() {
         NotificationCenter.default.post(name: Notification.Name(rawValue: SKPHOTO_LOADING_DID_END_NOTIFICATION), object: self)
     }
+    public func getVideoUrl() -> String? {
+        return videoURL
+    }
     
+    public func isVideo() -> Bool {
+        return self.hasVideo
+    }
 }
 
 // MARK: - Static Function
@@ -144,5 +155,12 @@ extension SKPhoto {
     
     public static func photoWithImageURL(_ url: String, holder: UIImage?) -> SKPhoto {
         return SKPhoto(url: url, holder: holder)
+    }
+    public static func videoWithImageURL(_ url: String, thumbnail: String?) -> SKPhoto {
+        let photo = SKPhoto(url: url)
+        photo.hasVideo = true
+        photo.videoURL = url
+        photo.photoURL = thumbnail
+        return photo
     }
 }
