@@ -319,19 +319,31 @@ public extension SKPhotoBrowser {
     @objc func gotoNextPage() {
         jumpToPageAtIndex(currentPageIndex + 1)
     }
+
     @objc func openVideo(){
         if photos[currentPageIndex].isVideo() ,
-           let videoUrl = photos[currentPageIndex].getVideoUrl() ,
-           let url = URL(string: videoUrl) {
-            let player = AVPlayer(url: url)
-            let playerViewController = AVPlayerViewController()
-            playerViewController.player = player
-            self.present(playerViewController, animated: true) {
-              playerViewController.player?.play()
+           let videoUrl = photos[currentPageIndex].getVideoUrl() {
+
+            if videoUrl.contains("http") {
+                if let url = URL(string: videoUrl) {
+                    startVideoPlayer(url)
+                }
+            } else {
+                startVideoPlayer(URL(fileURLWithPath: videoUrl))
             }
         }
-        
     }
+
+    private func startVideoPlayer(_ url: URL) {
+        let player = AVPlayer(url: url)
+        let playerViewController = AVPlayerViewController()
+        playerViewController.player = player
+        self.present(playerViewController, animated: true) {
+            playerViewController.player?.play()
+        }
+    }
+
+
     func cancelControlHiding() {
         if controlVisibilityTimer != nil {
             controlVisibilityTimer.invalidate()

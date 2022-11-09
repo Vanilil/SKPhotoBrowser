@@ -216,6 +216,7 @@ open class SKZoomingScrollView: UIScrollView {
                 videoBtn.isHidden = true
             }
             photo.loadUnderlyingImageAndNotify()
+            updateVideoBtn()
         } else {
             indicatorView.stopAnimating()
             updateVideoBtn()
