@@ -156,11 +156,26 @@ extension SKPhoto {
     public static func photoWithImageURL(_ url: String, holder: UIImage?) -> SKPhoto {
         return SKPhoto(url: url, holder: holder)
     }
+
     public static func videoWithImageURL(_ url: String, thumbnail: String?) -> SKPhoto {
         let photo = SKPhoto(url: url)
         photo.hasVideo = true
         photo.videoURL = url
         photo.photoURL = thumbnail
         return photo
+    }
+
+    public static func videoWithImageURL(_ url: String, thumbnailImg: UIImage?) -> SKPhoto {
+        if let thumbnail = thumbnailImg {
+            let photo = SKPhoto(image: thumbnail)
+            photo.hasVideo = true
+            photo.videoURL = url
+            return photo
+        } else {
+            let photo = SKPhoto(url: url)
+            photo.hasVideo = true
+            photo.videoURL = url
+            return photo
+        }
     }
 }
